@@ -38,12 +38,13 @@ app.get("/", (req, res) => {
           <ul id="goals">
           ${courseGoals
             .map(
-              (goal, index) => `
-            <li id="goal-${index}">
-              <span>${goal}</span>
+              (goal) => `
+
+            <li id="goal-${goal.id}">
+              <span>${goal.text}</span>
               <button 
-                hx-delete="/goals/${index}" 
-                hx-target="#goal-${index}"
+                hx-delete="/goals/${goal.id}" 
+                hx-target="#goal-${goal.id}"
                 hx-swap="outerHTML"
               >
               Remove
@@ -63,15 +64,18 @@ app.get("/", (req, res) => {
 // ________________________________ POST _____________________________
 app.post("/goals", (req, res) => {
   const goalText = req.body.goal;
-  courseGoals.push(goalText);
+  const id = new Date().getTime().toString();
+  courseGoals.push({
+    text: goalText,
+    id: id,
+  });
   // res.redirect('/');
-  const index = courseGoals.length - 1;
   res.send(`
-    <li id="goal-${index}">
+    <li id="goal-${id}">
       <span>${goalText}</span>
       <button
-        hx-delete="/goals/${index}" 
-        hx-target="#goal-${index}"
+        hx-delete="/goals/${id}" 
+        hx-target="#goal-${id}"
         hx-swap="outerHTML"
       >
       Remove
@@ -81,8 +85,9 @@ app.post("/goals", (req, res) => {
 });
 
 // _______________________________ DELETE ____________________________
-app.delete("/goals/:index", (req, res) => {
-  const index = req.params.index;
+app.delete("/goals/:id", (req, res) => {
+  const id = req.params.id;
+  const index = courseGoals.findIndex((goal) => goal.id === id);
   courseGoals.splice(index, 1);
   res.send();
 });
