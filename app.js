@@ -5,11 +5,11 @@ const courseGoals = [];
 // ______________________________________________________________________
 function renderGoalListItem(id, text) {
   return `
-    <li id="goal-${id}">
+    <li>
       <span>${text}</span>
       <button
         hx-delete="/goals/${id}" 
-        hx-target="#goal-${id}"
+        hx-target="closest li"
       >
       Remove
       </button>
@@ -54,8 +54,8 @@ app.get("/", (req, res) => {
         <section>
           <ul id="goals" hx-swap="outerHTML">
           ${courseGoals
-            .map((goal) => renderGoalListItem(goal.id, goal.text))
-            .join("")}
+      .map((goal) => renderGoalListItem(goal.id, goal.text))
+      .join("")}
           </ul>
         </section>
       </main>
