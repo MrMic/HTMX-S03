@@ -44,8 +44,9 @@ app.get("/", (req, res) => {
             hx-post="/goals" 
             hx-target="#goals"
             hx-swap="beforeend"
-            hx-on::after-request="this.reset()">
-            <!-- hx-on:submit="document.querySelector('form').reset()"> -->
+            hx-on::after-request="this.reset()"
+            hx-disabled-elt="form button"
+            >
             <div>
               <label htmlFor="goal">Goal</label>
               <input type="text" id="goal" name="goal" />
@@ -79,7 +80,9 @@ app.post("/goals", (req, res) => {
     id: id,
   });
   // res.redirect('/');
-  res.send(renderGoalListItem(id, goalText));
+  setTimeout(() => {
+    res.send(renderGoalListItem(id, goalText));
+  }, 1000);
 });
 
 // _______________________________ DELETE ____________________________
